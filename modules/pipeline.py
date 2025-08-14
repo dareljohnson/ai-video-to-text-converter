@@ -3,7 +3,16 @@ Pipeline for AI Video-to-Text Converter.
 
 Authors: Bai Blyden, Darel Johnson
 """
+import os
+import shutil
 import torch
+import sounddevice as sd
+import queue
+import numpy as np
+import tempfile
+import soundfile as sf
+import os
+import json
 from transformers import pipeline, AutoModelForSpeechSeq2Seq, AutoProcessor
 from moviepy.editor import VideoFileClip, AudioFileClip
 import librosa
@@ -25,9 +34,6 @@ class VideoToTextPipeline:
         """
         Transcribe all audio/video files in the input directory.
         """
-        import os
-        import glob
-        import shutil
         # Check ffmpeg availability
         if not shutil.which("ffmpeg"):
             print("ERROR: ffmpeg is not found in your PATH. Please install ffmpeg and add it to your system PATH, then restart your terminal.")
@@ -74,8 +80,6 @@ class VideoToTextPipeline:
         )
 
     def run(self):
-        import os
-        import shutil
         if self.config.realtime:
             self.run_realtime()
             return
@@ -105,12 +109,19 @@ class VideoToTextPipeline:
             text = correct_punctuation(text)
         if self.config.capitalization:
             text = correct_capitalization(text)
+        import json
         if self.config.track_timeline:
             timeline = track_timeline(result)
+            timeline_path = self.config.output_text_path.replace('_output.txt', '_timeline.json')
+            with open(timeline_path, 'w', encoding='utf-8') as f:
+                json.dump(timeline, f, indent=2)
         else:
             timeline = None
         if self.config.identify_speech_patterns:
             patterns = identify_speech_patterns(audio, sr)
+            patterns_path = self.config.output_text_path.replace('_output.txt', '_patterns.json')
+            with open(patterns_path, 'w', encoding='utf-8') as f:
+                json.dump(patterns, f, indent=2)
         else:
             patterns = None
         save_text(text, self.config.output_text_path)
@@ -119,6 +130,10 @@ class VideoToTextPipeline:
         print(f"Transcription saved to {self.config.output_text_path}")
         if self.config.generate_subtitles:
             print(f"Subtitles saved to {self.config.output_subs_path}")
+        if timeline is not None:
+            print(f"Timeline saved to {timeline_path}")
+        if patterns is not None:
+            print(f"Speech patterns saved to {patterns_path}")
 
     def run_realtime(self):
         """
@@ -126,14 +141,6 @@ class VideoToTextPipeline:
         Also extracts MFCCs and identifies speech patterns for each chunk.
         Saves results to output/results/ and transcripts to output/realtime/.
         """
-        import sounddevice as sd
-        import queue
-        import numpy as np
-        import tempfile
-        import soundfile as sf
-        import os
-        import json
-        from modules.utils import extract_mfcc, identify_speech_patterns
         print("[Realtime Mode] Speak into your microphone. Press Ctrl+C to stop.")
         samplerate = 16000
         blocksize = 4096

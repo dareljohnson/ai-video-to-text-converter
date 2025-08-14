@@ -4,6 +4,7 @@ Utility functions for AI Video-to-Text Converter.
 Authors: Bai Blyden, Darel Johnson
 """
 import os
+import re
 import librosa
 import soundfile as sf
 from moviepy.editor import VideoFileClip, AudioFileClip
@@ -24,7 +25,6 @@ def extract_mfcc(audio: np.ndarray, sr: int, n_mfcc: int = 13):
 
 def correct_punctuation(text: str) -> str:
     # Rule-based: split after first word for any two-word input, after first two for >4 words, else just add period
-    import re
     words = text.strip().split()
     if not words:
         return ''
@@ -44,7 +44,6 @@ def correct_punctuation(text: str) -> str:
 
 def correct_capitalization(text: str) -> str:
     # Simple rule-based: capitalize first letter of each sentence
-    import re
     def cap(match):
         return match.group(1) + match.group(2).upper()
     # Capitalize first letter
@@ -61,7 +60,6 @@ def track_timeline(result) -> list:
 
 def identify_speech_patterns(audio: np.ndarray, sr: int):
     # Simple speech pattern analysis: detect pauses and speaking rate
-    import librosa
     # Detect non-silent intervals
     intervals = librosa.effects.split(audio, top_db=30)
     durations = [(end - start) / sr for start, end in intervals]
@@ -81,7 +79,6 @@ def compute_wer(reference: str, hypothesis: str) -> float:
     """
     Compute Word Error Rate (WER) between reference and hypothesis strings.
     """
-    import numpy as np
     ref_words = reference.strip().split()
     hyp_words = hypothesis.strip().split()
     d = np.zeros((len(ref_words)+1, len(hyp_words)+1), dtype=np.uint8)
@@ -100,7 +97,6 @@ def compute_wer(reference: str, hypothesis: str) -> float:
 
 def save_subtitles(result, path: str):
     # Save SRT subtitles from ASR result
-    import os
     dirpart = os.path.dirname(path)
     if dirpart:
         os.makedirs(dirpart, exist_ok=True)
@@ -119,7 +115,6 @@ def format_srt_time(seconds: float) -> str:
     return f"{h:02}:{m:02}:{s:02},{ms:03}"
 
 def save_text(text: str, path: str):
-    import os
     dirpart = os.path.dirname(path)
     if dirpart:
         os.makedirs(dirpart, exist_ok=True)
