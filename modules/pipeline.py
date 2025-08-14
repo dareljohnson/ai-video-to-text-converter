@@ -31,6 +31,8 @@ from modules.utils import (
 
 class VideoToTextPipeline:
     def run_batch(self):
+        import time
+        batch_start = time.time()
         """
         Transcribe all audio/video files in the input directory.
         """
@@ -49,8 +51,13 @@ class VideoToTextPipeline:
             print(f"No audio/video files found in {input_dir}")
             return
         print(f"Found {len(files)} files in {input_dir}: {files}")
+        timings_path = os.path.join(output_dir, 'timings.txt')
+        # Clear timings file at start of batch
+        with open(timings_path, 'w', encoding='utf-8') as tf:
+            tf.write('')
         for fname in files:
             print(f"\n[Batch] Processing {fname} ...")
+            file_start = time.time()
             self.config.input_path = os.path.join("input", fname)
             # Output file names
             base = os.path.splitext(fname)[0]
@@ -60,6 +67,16 @@ class VideoToTextPipeline:
                 self.run()
             except Exception as e:
                 print(f"[Batch] Error processing {fname}: {e}")
+            file_elapsed = time.time() - file_start
+            print(f"[Batch] Processing time for {fname}: {file_elapsed:.2f} seconds.")
+            # Save per-file timing
+            with open(timings_path, 'a', encoding='utf-8') as tf:
+                tf.write(f"{fname}: {file_elapsed:.2f} seconds\n")
+        batch_elapsed = time.time() - batch_start
+        print(f"Total batch processing time: {batch_elapsed:.2f} seconds.")
+        with open(timings_path, 'a', encoding='utf-8') as tf:
+            tf.write(f"Total batch processing time: {batch_elapsed:.2f} seconds.\n")
+
     def __init__(self, config: AppConfig):
         self.config = config
         self.device = "cuda" if torch.cuda.is_available() and config.device == "cuda" else "cpu"
@@ -80,6 +97,8 @@ class VideoToTextPipeline:
         )
 
     def run(self):
+        import time
+        start_time = time.time()
         if self.config.realtime:
             self.run_realtime()
             return
@@ -134,6 +153,12 @@ class VideoToTextPipeline:
             print(f"Timeline saved to {timeline_path}")
         if patterns is not None:
             print(f"Speech patterns saved to {patterns_path}")
+        elapsed = time.time() - start_time
+        print(f"Processing time: {elapsed:.2f} seconds.")
+        # Save timing info
+        timings_path = os.path.join(os.path.dirname(self.config.output_text_path), 'timings.txt')
+        with open(timings_path, 'a', encoding='utf-8') as tf:
+            tf.write(f"{os.path.basename(self.config.output_text_path)}: {elapsed:.2f} seconds\n")
 
     def run_realtime(self):
         """
