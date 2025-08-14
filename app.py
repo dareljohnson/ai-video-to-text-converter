@@ -18,6 +18,7 @@ from modules.utils import compute_wer
 def main():
     parser = argparse.ArgumentParser(description="AI Video-to-Text Converter")
     parser.add_argument('--realtime', action='store_true', help='Enable real-time audio processing from microphone')
+    parser.add_argument('--cuda-device', type=int, default=0, help='CUDA GPU index to use (default: 0)')
     parser.add_argument('--wer', nargs=2, metavar=('REFERENCE', 'HYPOTHESIS'), help='Compute Word Error Rate (WER) between reference and hypothesis text files')
     args = parser.parse_args()
 
@@ -30,7 +31,7 @@ def main():
         print(f"Word Error Rate (WER): {wer:.3f}")
         return
 
-    config = AppConfig(realtime=args.realtime)
+    config = AppConfig(realtime=args.realtime, cuda_device=args.cuda_device)
     pipeline = VideoToTextPipeline(config)
     pipeline.run()
 

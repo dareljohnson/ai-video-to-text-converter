@@ -9,6 +9,7 @@ from typing import Optional
 class AppConfig(BaseModel):
     model_name: str = "openai/whisper-small"
     device: str = "cuda"  # fallback to cpu if not available
+    cuda_device: int = 0  # GPU index to use if device is cuda
     input_path: Optional[str] = "input/GPT-4o API Crash Course for Beginners.mp4"  # relative to project root
     output_text_path: str = "output/output.txt"  # relative to project root
     output_subs_path: str = "output/output.srt"  # relative to project root

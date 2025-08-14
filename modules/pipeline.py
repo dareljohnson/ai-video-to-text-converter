@@ -24,10 +24,16 @@ class VideoToTextPipeline:
     def __init__(self, config: AppConfig):
         self.config = config
         self.device = "cuda" if torch.cuda.is_available() and config.device == "cuda" else "cpu"
+        cuda_idx = config.cuda_device if self.device == "cuda" else -1
+        if self.device == "cuda":
+            n_gpus = torch.cuda.device_count()
+            if cuda_idx >= n_gpus:
+                raise ValueError(f"Requested CUDA device {cuda_idx}, but only {n_gpus} GPUs are available.")
+            print(f"[INFO] Using CUDA device {cuda_idx}: {torch.cuda.get_device_name(cuda_idx)}")
         self.asr_pipeline = pipeline(
             "automatic-speech-recognition",
             model=config.model_name,
-            device=0 if self.device == "cuda" else -1,
+            device=cuda_idx,
             model_kwargs={
                 "torch_dtype": torch.float16 if self.device == "cuda" else torch.float32,
                 "attn_implementation": "eager"
