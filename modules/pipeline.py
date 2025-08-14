@@ -37,6 +37,9 @@ class VideoToTextPipeline:
     def run(self):
         import os
         import shutil
+        if self.config.realtime:
+            self.run_realtime()
+            return
         # Check ffmpeg availability
         if not shutil.which("ffmpeg"):
             print("ERROR: ffmpeg is not found in your PATH. Please install ffmpeg and add it to your system PATH, then restart your terminal.")
@@ -77,3 +80,78 @@ class VideoToTextPipeline:
         print(f"Transcription saved to {self.config.output_text_path}")
         if self.config.generate_subtitles:
             print(f"Subtitles saved to {self.config.output_subs_path}")
+
+    def run_realtime(self):
+        """
+        Real-time audio processing from microphone using sounddevice.
+        Also extracts MFCCs and identifies speech patterns for each chunk.
+        Saves results to output/results/ and transcripts to output/realtime/.
+        """
+        import sounddevice as sd
+        import queue
+        import numpy as np
+        import tempfile
+        import soundfile as sf
+        import os
+        import json
+        from modules.utils import extract_mfcc, identify_speech_patterns
+        print("[Realtime Mode] Speak into your microphone. Press Ctrl+C to stop.")
+        samplerate = 16000
+        blocksize = 4096
+        q = queue.Queue()
+        # Prepare output directories
+        results_dir = os.path.join("output", "results")
+        realtime_dir = os.path.join("output", "realtime")
+        os.makedirs(results_dir, exist_ok=True)
+        os.makedirs(realtime_dir, exist_ok=True)
+        transcript_path = os.path.join(realtime_dir, "realtime_transcript.txt")
+        chunk_idx = 1
+        def callback(indata, frames, time, status):
+            if status:
+                print(status)
+            q.put(indata.copy())
+        try:
+            with open(transcript_path, 'w', encoding='utf-8') as transcript_file:
+                with sd.InputStream(samplerate=samplerate, channels=1, dtype='float32', blocksize=blocksize, callback=callback):
+                    audio_buffer = []
+                    while True:
+                        data = q.get()
+                        audio_buffer.append(data)
+                        # Process every ~5 seconds of audio
+                        if len(audio_buffer) * blocksize >= samplerate * 5:
+                            chunk = np.concatenate(audio_buffer, axis=0)
+                            with tempfile.NamedTemporaryFile(suffix='.wav', delete=False) as tmpfile:
+                                sf.write(tmpfile.name, chunk, samplerate)
+                                result = self.asr_pipeline(tmpfile.name, return_timestamps="word", generate_kwargs={"task": "transcribe", "language": self.config.language})
+                                text = result["text"]
+                                if self.config.punctuation_correction:
+                                    text = correct_punctuation(text)
+                                if self.config.capitalization:
+                                    text = correct_capitalization(text)
+                                # Extract MFCCs
+                                mfccs = None
+                                if self.config.mfcc:
+                                    mfccs = extract_mfcc(chunk.flatten(), samplerate)
+                                    mfcc_path = os.path.join(results_dir, f"mfcc_chunk_{chunk_idx}.npy")
+                                    np.save(mfcc_path, mfccs)
+                                # Identify speech patterns
+                                patterns = None
+                                if self.config.identify_speech_patterns:
+                                    patterns = identify_speech_patterns(chunk.flatten(), samplerate)
+                                    patterns_path = os.path.join(results_dir, f"patterns_chunk_{chunk_idx}.json")
+                                    with open(patterns_path, 'w', encoding='utf-8') as pf:
+                                        json.dump(patterns, pf, indent=2)
+                                # Save transcript
+                                transcript_file.write(text + "\n")
+                                transcript_file.flush()
+                                print(f"[Realtime Transcript] {text}")
+                                if mfccs is not None:
+                                    print(f"[Realtime MFCC shape] {mfccs.shape} (saved to {mfcc_path})")
+                                if patterns is not None:
+                                    print(f"[Realtime Speech Patterns] {patterns} (saved to {patterns_path})")
+                            audio_buffer = []
+                            chunk_idx += 1
+        except KeyboardInterrupt:
+            print("\n[Realtime Mode] Stopped.")
+        except Exception as e:
+            print(f"[Realtime Mode] Error: {e}")

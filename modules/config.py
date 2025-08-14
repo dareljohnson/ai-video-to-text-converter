@@ -19,3 +19,4 @@ class AppConfig(BaseModel):
     capitalization: bool = True
     track_timeline: bool = True
     identify_speech_patterns: bool = True
+    realtime: bool = False  # If True, enable real-time audio processing

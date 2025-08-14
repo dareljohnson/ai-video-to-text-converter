@@ -70,5 +70,10 @@ class TestUtils(unittest.TestCase):
             self.assertEqual(f.read(), text)
         os.remove(path)
 
+    def test_realtime_option(self):
+        from modules.config import AppConfig
+        config = AppConfig(realtime=True)
+        self.assertTrue(config.realtime)
+
 if __name__ == "__main__":
     unittest.main()
