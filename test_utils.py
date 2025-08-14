@@ -75,5 +75,12 @@ class TestUtils(unittest.TestCase):
         config = AppConfig(realtime=True)
         self.assertTrue(config.realtime)
 
+    def test_compute_wer(self):
+        from modules.utils import compute_wer
+        ref = "the quick brown fox jumps over the lazy dog"
+        hyp = "the quick brown fox jump over the lazy dog"
+        wer = compute_wer(ref, hyp)
+        self.assertAlmostEqual(wer, 1/9, places=3)
+
 if __name__ == "__main__":
     unittest.main()
