@@ -87,6 +87,7 @@ You will see live results in the console and files will be saved for each audio 
 ### CLI Flags
 
 - `--realtime` : Enable real-time audio processing from microphone
+- `--cuda-device N` : Select which CUDA GPU to use (e.g., `--cuda-device 1` for GPU 1, default is 0)
 - `--wer reference.txt hypothesis.txt` : Compute Word Error Rate (WER) between a ground-truth transcript and a system output
 
 ---
@@ -148,10 +149,14 @@ You can also import and use utility functions from `modules.utils` for MFCC extr
 
 ---
 
+
 ## Troubleshooting
 
 - **FFmpeg not found:** Ensure FFmpeg is installed and in your PATH.
-- **CUDA not used:** Make sure you have a compatible GPU and CUDA drivers.
+- **CUDA not used or wrong GPU:**
+	- Make sure you have a compatible GPU, NVIDIA drivers, and CUDA toolkit installed.
+	- Use `--cuda-device N` to select the correct GPU (e.g., your RTX 4080 may be GPU 1).
+	- The program prints which GPU is being used at startup.
 - **FileNotFoundError:** Ensure your input file is in the project root and you provide the correct relative path.
 
 ---
