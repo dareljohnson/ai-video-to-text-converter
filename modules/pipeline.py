@@ -86,10 +86,13 @@ class VideoToTextPipeline:
             if cuda_idx >= n_gpus:
                 raise ValueError(f"Requested CUDA device {cuda_idx}, but only {n_gpus} GPUs are available.")
             print(f"[INFO] Using CUDA device {cuda_idx}: {torch.cuda.get_device_name(cuda_idx)}")
+
+        # Pipeline for ASR    
         self.asr_pipeline = pipeline(
             "automatic-speech-recognition",
             model=config.model_name,
-            device=cuda_idx,
+            #device=cuda_idx,
+            device_map="auto",
             model_kwargs={
                 "torch_dtype": torch.float16 if self.device == "cuda" else torch.float32,
                 "attn_implementation": "eager"

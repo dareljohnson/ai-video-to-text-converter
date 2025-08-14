@@ -44,8 +44,89 @@ ai-video-to-text_env\Scripts\activate.bat
 
 3. **Install dependencies:**
 
+All required packages are listed in `requirements.txt`. Install them with:
+
 ```sh
-pip install torch==2.2.1 transformers==4.40.0 datasets==2.18.0 moviepy==1.0.3 accelerate==0.30.1 librosa soundfile pydantic
+pip install -r requirements.txt
+```
+
+**requirements.txt preview:**
+
+```text
+accelerate==1.10.0
+aiohappyeyeballs==2.6.1
+aiohttp==3.12.15
+aiosignal==1.4.0
+annotated-types==0.7.0
+async-timeout==5.0.1
+attrs==25.3.0
+audioread==3.0.1
+certifi==2025.8.3
+cffi==1.17.1
+charset-normalizer==3.4.3
+colorama==0.4.6
+datasets==2.18.0
+decorator==4.4.2
+dill==0.3.8
+filelock==3.18.0
+frozenlist==1.7.0
+fsspec==2024.2.0
+git-filter-repo==2.47.0
+huggingface-hub==0.34.4
+idna==3.10
+imageio==2.37.0
+imageio-ffmpeg==0.6.0
+Jinja2==3.1.6
+joblib==1.5.1
+lazy_loader==0.4
+librosa==0.11.0
+llvmlite==0.44.0
+MarkupSafe==3.0.2
+moviepy==1.0.3
+mpmath==1.3.0
+msgpack==1.1.1
+multidict==6.6.4
+multiprocess==0.70.16
+networkx==3.4.2
+numba==0.61.2
+numpy==1.26.4
+packaging==25.0
+pandas==2.3.1
+pillow==11.3.0
+platformdirs==4.3.8
+pooch==1.8.2
+proglog==0.1.12
+propcache==0.3.2
+psutil==7.0.0
+pyarrow==21.0.0
+pyarrow-hotfix==0.7
+pycparser==2.22
+pydantic==2.11.7
+pydantic_core==2.33.2
+python-dateutil==2.9.0.post0
+pytz==2025.2
+PyYAML==6.0.2
+regex==2025.7.34
+requests==2.32.4
+safetensors==0.6.2
+scikit-learn==1.7.1
+scipy==1.15.3
+six==1.17.0
+sounddevice==0.5.2
+soundfile==0.13.1
+soxr==0.5.0.post1
+sympy==1.14.0
+threadpoolctl==3.6.0
+tokenizers==0.19.1
+torch==2.2.1
+tqdm==4.67.1
+transformers==4.40.0
+typing-inspection==0.4.1
+typing_extensions==4.14.1
+tzdata==2025.2
+urllib3==2.5.0
+xxhash==3.5.0
+yarl==1.20.1
 ```
 
 4. **Install FFmpeg:**
