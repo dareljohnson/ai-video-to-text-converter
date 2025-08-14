@@ -26,31 +26,36 @@ This project provides a robust, production-ready pipeline for converting audio o
 ## Installation
 
 1. **Clone the repository:**
-	```sh
-	git clone https://github.com/dareljohnson/ai-video-to-text-converter.git
-	cd ai-video-to-text-converter
-	```
+
+```sh
+git clone https://github.com/dareljohnson/ai-video-to-text-converter.git
+cd ai-video-to-text-converter
+```
 
 2. **Create and activate a Python 3.10 virtual environment:**
-	```sh
-	python -m venv ai-video-to-text_env
-	# On Windows PowerShell:
-	.\ai-video-to-text_env\Scripts\Activate.ps1
-	# On Windows CMD:
-	ai-video-to-text_env\Scripts\activate.bat
-	```
+
+```sh
+python -m venv ai-video-to-text_env
+# On Windows PowerShell:
+./ai-video-to-text_env/Scripts/Activate.ps1
+# On Windows CMD:
+ai-video-to-text_env\Scripts\activate.bat
+```
 
 3. **Install dependencies:**
-	```sh
-	pip install torch==2.2.1 transformers==4.40.0 datasets==2.18.0 moviepy==1.0.3 accelerate==0.30.1 librosa soundfile pydantic
-	```
+
+```sh
+pip install torch==2.2.1 transformers==4.40.0 datasets==2.18.0 moviepy==1.0.3 accelerate==0.30.1 librosa soundfile pydantic
+```
 
 4. **Install FFmpeg:**
+
 	- Download from [ffmpeg.org](https://ffmpeg.org/download.html) and add the `bin` directory to your system PATH.
 	- Verify with:
-	  ```sh
-	  ffmpeg -version
-	  ```
+
+```sh
+ffmpeg -version
+```
 
 ---
 
@@ -59,15 +64,21 @@ This project provides a robust, production-ready pipeline for converting audio o
 ### Standard (Batch) Mode
 
 1. **Place your audio or video file in the project root directory.**
+
 2. **Run the application:**
-	```sh
-	./ai-video-to-text_env/Scripts/Activate.ps1  # PowerShell
-	python app.py
-	```
+
+```sh
+./ai-video-to-text_env/Scripts/Activate.ps1  # PowerShell
+python app.py
+```
+
 3. **When prompted, enter the relative path to your file (e.g., `myfile.mp4`).**
+
 4. **Output:**
+
 	- Transcription: `output/output.txt`
 	- Subtitles: `output/output.srt`
+	- Processing time: See `output/timings.txt`
 
 ### Real-Time Mode
 
@@ -78,6 +89,7 @@ python app.py --realtime
 ```
 
 **Real-time output:**
+
 - Transcript: `output/realtime/realtime_transcript.txt`
 - MFCC features: `output/results/mfcc_chunk_*.npy`
 - Speech patterns: `output/results/patterns_chunk_*.json`
@@ -85,6 +97,7 @@ python app.py --realtime
 You will see live results in the console and files will be saved for each audio chunk.
 
 ### CLI Flags
+
 
 - `--realtime` : Enable real-time audio processing from microphone
 - `--batch` : Transcribe all audio/video files in the `input` directory. Each file will be processed and outputs saved to `output/` with unique filenames.
@@ -100,6 +113,8 @@ python app.py --batch
 
 Each file will be transcribed and the outputs will be saved as `output/<filename>_output.txt` and `output/<filename>_output.srt`.
 
+**Processing times for each file and the total batch are saved to `output/timings.txt`.**
+
 ---
 
 ## Evaluating Transcription Accuracy (WER)
@@ -107,17 +122,23 @@ Each file will be transcribed and the outputs will be saved as `output/<filename
 To evaluate the accuracy of your transcription using Word Error Rate (WER):
 
 1. Prepare a ground-truth transcript file, e.g., `reference.txt`.
+
 2. Generate a system transcript (the "hypothesis") by running the pipeline. By default, this is saved as `output/output.txt`.
+
 3. Copy or rename the output to `hypothesis.txt`:
-	```sh
-	copy output\output.txt hypothesis.txt  # On Windows
-	# or
-	cp output/output.txt hypothesis.txt    # On Mac/Linux
-	```
+
+```sh
+copy output\output.txt hypothesis.txt  # On Windows
+# or
+cp output/output.txt hypothesis.txt    # On Mac/Linux
+```
+
 4. Run the WER evaluation:
-	```sh
-	python app.py --wer reference.txt hypothesis.txt
-	```
+
+```sh
+python app.py --wer reference.txt hypothesis.txt
+```
+
 5. The WER score will be printed in the console.
 
 ---
