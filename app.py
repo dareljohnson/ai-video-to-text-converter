@@ -20,6 +20,7 @@ def main():
     parser.add_argument('--realtime', action='store_true', help='Enable real-time audio processing from microphone')
     parser.add_argument('--cuda-device', type=int, default=0, help='CUDA GPU index to use (default: 0)')
     parser.add_argument('--wer', nargs=2, metavar=('REFERENCE', 'HYPOTHESIS'), help='Compute Word Error Rate (WER) between reference and hypothesis text files')
+    parser.add_argument('--batch', action='store_true', help='Transcribe all audio/video files in the input directory')
     args = parser.parse_args()
 
     if args.wer:
@@ -33,7 +34,10 @@ def main():
 
     config = AppConfig(realtime=args.realtime, cuda_device=args.cuda_device)
     pipeline = VideoToTextPipeline(config)
-    pipeline.run()
+    if args.batch:
+        pipeline.run_batch()
+    else:
+        pipeline.run()
 
 
 if __name__ == "__main__":

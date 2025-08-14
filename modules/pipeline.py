@@ -21,6 +21,39 @@ from modules.utils import (
 )
 
 class VideoToTextPipeline:
+    def run_batch(self):
+        """
+        Transcribe all audio/video files in the input directory.
+        """
+        import os
+        import glob
+        import shutil
+        # Check ffmpeg availability
+        if not shutil.which("ffmpeg"):
+            print("ERROR: ffmpeg is not found in your PATH. Please install ffmpeg and add it to your system PATH, then restart your terminal.")
+            return
+        project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        input_dir = os.path.join(project_root, "input")
+        output_dir = os.path.join(project_root, "output")
+        os.makedirs(output_dir, exist_ok=True)
+        # Supported extensions
+        exts = (".mp4", ".avi", ".mov", ".mkv", ".wav", ".mp3", ".flac", ".ogg")
+        files = [f for f in os.listdir(input_dir) if f.lower().endswith(exts)]
+        if not files:
+            print(f"No audio/video files found in {input_dir}")
+            return
+        print(f"Found {len(files)} files in {input_dir}: {files}")
+        for fname in files:
+            print(f"\n[Batch] Processing {fname} ...")
+            self.config.input_path = os.path.join("input", fname)
+            # Output file names
+            base = os.path.splitext(fname)[0]
+            self.config.output_text_path = os.path.join("output", f"{base}_output.txt")
+            self.config.output_subs_path = os.path.join("output", f"{base}_output.srt")
+            try:
+                self.run()
+            except Exception as e:
+                print(f"[Batch] Error processing {fname}: {e}")
     def __init__(self, config: AppConfig):
         self.config = config
         self.device = "cuda" if torch.cuda.is_available() and config.device == "cuda" else "cpu"
@@ -54,35 +87,14 @@ class VideoToTextPipeline:
         project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         # Input path: relative to project root
         input_path = self.config.input_path
-        full_input_path = os.path.join(project_root, input_path)
-        # If input_path is a directory, process all supported files in it
-        if os.path.isdir(full_input_path):
-            supported_exts = ['.mp4', '.avi', '.mov', '.mkv', '.wav', '.mp3', '.flac', '.ogg']
-            files = [f for f in os.listdir(full_input_path) if os.path.splitext(f)[1].lower() in supported_exts]
-            if not files:
-                print(f"No supported audio/video files found in directory: {input_path}")
-                return
-            for fname in files:
-                print(f"Processing {fname} ...")
-                in_file = os.path.join(full_input_path, fname)
-                out_base = os.path.splitext(fname)[0]
-                out_text = os.path.join(project_root, 'output', f'{out_base}.txt')
-                out_srt = os.path.join(project_root, 'output', f'{out_base}.srt')
-                self._transcribe_file(in_file, out_text, out_srt)
-        else:
-            # Prompt for file if not found
-            while not input_path or not os.path.isfile(full_input_path):
-                input_path = input("Enter the RELATIVE path to an audio or video file in the project root: ").strip()
-                full_input_path = os.path.join(project_root, input_path)
-                if not os.path.isfile(full_input_path):
-                    print(f"File not found: {input_path}. Please try again.")
-            out_text = os.path.join(project_root, self.config.output_text_path)
-            out_srt = os.path.join(project_root, self.config.output_subs_path)
-            self._transcribe_file(full_input_path, out_text, out_srt)
-
-    def _transcribe_file(self, input_path, output_text_path, output_subs_path):
-        import librosa
-        from modules.utils import extract_audio, extract_mfcc, correct_punctuation, correct_capitalization, track_timeline, identify_speech_patterns, save_text, save_subtitles
+        while not input_path or not os.path.isfile(os.path.join(project_root, input_path)):
+            input_path = input("Enter the RELATIVE path to an audio or video file in the project root: ").strip()
+            if not os.path.isfile(os.path.join(project_root, input_path)):
+                print(f"File not found: {input_path}. Please try again.")
+        input_path = os.path.join(project_root, input_path)
+        # Output paths: always relative to project root
+        self.config.output_text_path = os.path.join(project_root, self.config.output_text_path)
+        self.config.output_subs_path = os.path.join(project_root, self.config.output_subs_path)
         audio_path = extract_audio(input_path)
         audio, sr = librosa.load(audio_path, sr=None)
         if self.config.mfcc:
@@ -101,12 +113,12 @@ class VideoToTextPipeline:
             patterns = identify_speech_patterns(audio, sr)
         else:
             patterns = None
-        save_text(text, output_text_path)
+        save_text(text, self.config.output_text_path)
         if self.config.generate_subtitles:
-            save_subtitles(result, output_subs_path)
-        print(f"Transcription saved to {output_text_path}")
+            save_subtitles(result, self.config.output_subs_path)
+        print(f"Transcription saved to {self.config.output_text_path}")
         if self.config.generate_subtitles:
-            print(f"Subtitles saved to {output_subs_path}")
+            print(f"Subtitles saved to {self.config.output_subs_path}")
 
     def run_realtime(self):
         """

@@ -58,27 +58,16 @@ This project provides a robust, production-ready pipeline for converting audio o
 
 ### Standard (Batch) Mode
 
-**Single file:**
-1. Place your audio or video file in the project root directory.
-2. Run the application:
+1. **Place your audio or video file in the project root directory.**
+2. **Run the application:**
 	```sh
 	./ai-video-to-text_env/Scripts/Activate.ps1  # PowerShell
 	python app.py
 	```
-3. When prompted, enter the relative path to your file (e.g., `myfile.mp4`).
-4. Output:
+3. **When prompted, enter the relative path to your file (e.g., `myfile.mp4`).**
+4. **Output:**
 	- Transcription: `output/output.txt`
 	- Subtitles: `output/output.srt`
-
-**Multiple files (directory batch mode):**
-1. Place all your audio/video files in a directory (e.g., `input/`).
-2. Set `input_path` in `modules/config.py` to the directory name (e.g., `input`).
-3. Run the application:
-	```sh
-	./ai-video-to-text_env/Scripts/Activate.ps1
-	python app.py
-	```
-4. All supported files in the directory will be transcribed. Outputs will be saved as `output/<filename>.txt` and `output/<filename>.srt` for each input file.
 
 ### Real-Time Mode
 
@@ -98,8 +87,18 @@ You will see live results in the console and files will be saved for each audio 
 ### CLI Flags
 
 - `--realtime` : Enable real-time audio processing from microphone
+- `--batch` : Transcribe all audio/video files in the `input` directory. Each file will be processed and outputs saved to `output/` with unique filenames.
 - `--cuda-device N` : Select which CUDA GPU to use (e.g., `--cuda-device 1` for GPU 1, default is 0)
 - `--wer reference.txt hypothesis.txt` : Compute Word Error Rate (WER) between a ground-truth transcript and a system output
+### Batch Mode
+
+To transcribe all audio/video files in the `input` directory at once, use:
+
+```sh
+python app.py --batch
+```
+
+Each file will be transcribed and the outputs will be saved as `output/<filename>_output.txt` and `output/<filename>_output.srt`.
 
 ---
 
