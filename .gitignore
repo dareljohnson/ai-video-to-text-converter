@@ -70,3 +70,6 @@ Desktop.ini
 
 # Output
 output/
+
+# Large files
+input/*.mp4
