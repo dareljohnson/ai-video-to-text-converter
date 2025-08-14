@@ -1,3 +1,8 @@
+"""
+Pipeline for AI Video-to-Text Converter.
+
+Authors: Bai Blyden, Darel Johnson
+"""
 import torch
 from transformers import pipeline, AutoModelForSpeechSeq2Seq, AutoProcessor
 from moviepy.editor import VideoFileClip, AudioFileClip

@@ -1,5 +1,8 @@
+
 """
 Main entry point for the AI Video-to-Text Converter application.
+
+Authors: Bai Blyden, Darel Johnson
 """
 
 from modules.pipeline import VideoToTextPipeline

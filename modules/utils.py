@@ -1,3 +1,8 @@
+"""
+Utility functions for AI Video-to-Text Converter.
+
+Authors: Bai Blyden, Darel Johnson
+"""
 import os
 import librosa
 import soundfile as sf

@@ -1,5 +1,8 @@
 
+
 # AI Video-to-Text Converter
+
+**Authors:** Bai Blyden, Darel Johnson
 
 This project provides a robust, production-ready pipeline for converting audio or video files to text and subtitles using OpenAI Whisper, HuggingFace Transformers, and Python. It supports multiple languages, GPU acceleration, MFCC extraction, punctuation/capitalization correction, and more.
 
@@ -113,4 +116,8 @@ You can also import and use utility functions from `modules.utils` for MFCC extr
 
 ## License
 
-MIT License. See [LICENSE](LICENSE) for details.
+This project is licensed under the Apache License, Version 2.0. You may obtain a copy of the License at:
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the LICENSE file for the full license text.

@@ -1,3 +1,8 @@
+"""
+Unit tests for AI Video-to-Text Converter utilities.
+
+Authors: Bai Blyden, Darel Johnson
+"""
 import unittest
 import numpy as np
 import os

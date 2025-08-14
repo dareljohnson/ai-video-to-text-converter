@@ -1,3 +1,8 @@
+"""
+Configuration for AI Video-to-Text Converter.
+
+Authors: Bai Blyden, Darel Johnson
+"""
 from pydantic import BaseModel
 from typing import Optional
 
