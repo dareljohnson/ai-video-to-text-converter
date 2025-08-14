@@ -77,6 +77,27 @@ def identify_speech_patterns(audio: np.ndarray, sr: int):
         'num_segments': len(intervals)
     }
 
+def compute_wer(reference: str, hypothesis: str) -> float:
+    """
+    Compute Word Error Rate (WER) between reference and hypothesis strings.
+    """
+    import numpy as np
+    ref_words = reference.strip().split()
+    hyp_words = hypothesis.strip().split()
+    d = np.zeros((len(ref_words)+1, len(hyp_words)+1), dtype=np.uint8)
+    for i in range(len(ref_words)+1):
+        d[i][0] = i
+    for j in range(len(hyp_words)+1):
+        d[0][j] = j
+    for i in range(1, len(ref_words)+1):
+        for j in range(1, len(hyp_words)+1):
+            if ref_words[i-1] == hyp_words[j-1]:
+                d[i][j] = d[i-1][j-1]
+            else:
+                d[i][j] = 1 + min(d[i-1][j], d[i][j-1], d[i-1][j-1])
+    wer = d[len(ref_words)][len(hyp_words)] / max(1, len(ref_words))
+    return wer
+
 def save_subtitles(result, path: str):
     # Save SRT subtitles from ASR result
     import os

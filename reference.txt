@@ -1,0 +1,1 @@
+Speech to text from the Speech service, also known as speech recognition, enables real-time and batch transcription of audio streams into text. With additional reference text input, it also enables real-time pronunciation assessment and gives speakers feedback on the accuracy and fluency of spoken audio.

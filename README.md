@@ -56,6 +56,8 @@ This project provides a robust, production-ready pipeline for converting audio o
 
 ## Usage
 
+### Standard (Batch) Mode
+
 1. **Place your audio or video file in the project root directory.**
 2. **Run the application:**
 	```sh
@@ -66,6 +68,46 @@ This project provides a robust, production-ready pipeline for converting audio o
 4. **Output:**
 	- Transcription: `output/output.txt`
 	- Subtitles: `output/output.srt`
+
+### Real-Time Mode
+
+To transcribe audio from your microphone in real time:
+
+```sh
+python app.py --realtime
+```
+
+**Real-time output:**
+- Transcript: `output/realtime/realtime_transcript.txt`
+- MFCC features: `output/results/mfcc_chunk_*.npy`
+- Speech patterns: `output/results/patterns_chunk_*.json`
+
+You will see live results in the console and files will be saved for each audio chunk.
+
+### CLI Flags
+
+- `--realtime` : Enable real-time audio processing from microphone
+- `--wer reference.txt hypothesis.txt` : Compute Word Error Rate (WER) between a ground-truth transcript and a system output
+
+---
+
+## Evaluating Transcription Accuracy (WER)
+
+To evaluate the accuracy of your transcription using Word Error Rate (WER):
+
+1. Prepare a ground-truth transcript file, e.g., `reference.txt`.
+2. Generate a system transcript (the "hypothesis") by running the pipeline. By default, this is saved as `output/output.txt`.
+3. Copy or rename the output to `hypothesis.txt`:
+	```sh
+	copy output\output.txt hypothesis.txt  # On Windows
+	# or
+	cp output/output.txt hypothesis.txt    # On Mac/Linux
+	```
+4. Run the WER evaluation:
+	```sh
+	python app.py --wer reference.txt hypothesis.txt
+	```
+5. The WER score will be printed in the console.
 
 ---
 
