@@ -263,15 +263,27 @@ The transcribed text will be saved to `output/output.txt` and subtitles to `outp
 
 ## Integration Example
 
+
 You can use the pipeline in your own Python projects:
 
+### Batch Mode (process all files in input directory)
 ```python
 from modules.config import AppConfig
 from modules.pipeline import VideoToTextPipeline
 
-config = AppConfig(input_path="myfile.mp4")
+config = AppConfig(realtime=False)  # default is batch mode
 pipeline = VideoToTextPipeline(config)
-pipeline.run()
+pipeline.run_batch()
+```
+
+### Real-Time Mode (microphone input)
+```python
+from modules.config import AppConfig
+from modules.pipeline import VideoToTextPipeline
+
+config = AppConfig(realtime=True)
+pipeline = VideoToTextPipeline(config)
+pipeline.run()  # or pipeline.run_realtime()
 ```
 
 You can also import and use utility functions from `modules.utils` for MFCC extraction, punctuation correction, etc.
