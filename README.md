@@ -18,6 +18,8 @@ This project provides a robust, production-ready pipeline for converting audio o
 - Punctuation and capitalization correction
 - Timeline tracking and subtitle (SRT) generation
 - Speech pattern analysis (pauses, speaking rate)
+- Paragraph segmentation in transcripts (based on pauses)
+- Basic speaker diarization: transcript is separated into paragraphs by speaker ("Speaker 1", "Speaker 2", ...)
 - Outputs plain text and subtitles to the `output/` directory
 - Modular, extensible, and easy to integrate into other Python projects
 
@@ -157,9 +159,9 @@ python app.py
 
 4. **Output:**
 
-	- Transcription: `output/output.txt`
-	- Subtitles: `output/output.srt`
-	- Processing time: See `output/timings.txt`
+		- Transcription: `output/output.txt` (now formatted with paragraphs and speaker labels)
+		- Subtitles: `output/output.srt`
+		- Processing time: See `output/timings.txt`
 
 ### Real-Time Mode
 
