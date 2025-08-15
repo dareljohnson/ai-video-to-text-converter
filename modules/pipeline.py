@@ -28,6 +28,7 @@ from modules.utils import (
     save_subtitles,
     save_text
 )
+from modules.utils import format_transcript_with_paragraphs_and_speakers
 
 class VideoToTextPipeline:
     def run_batch(self):
@@ -122,10 +123,23 @@ class VideoToTextPipeline:
         self.config.output_subs_path = os.path.join(project_root, self.config.output_subs_path)
         audio_path = extract_audio(input_path)
         audio, sr = librosa.load(audio_path, sr=None)
+        # Use MFCCs to detect silence and skip silent segments
+        skip_transcription = False
+        mfccs = None
         if self.config.mfcc:
             mfccs = extract_mfcc(audio, sr)
-        result = self.asr_pipeline(audio_path, return_timestamps="word", generate_kwargs={"task": "transcribe", "language": self.config.language})
-        text = result["text"]
+            # Simple silence detection: if mean absolute MFCC energy is very low, treat as silence
+            mfcc_energy = np.mean(np.abs(mfccs))
+            silence_threshold = 1e-2  # empirically chosen, may need tuning
+            if mfcc_energy < silence_threshold:
+                print(f"[MFCC] Low energy detected (mean abs MFCC: {mfcc_energy:.5f}). Skipping transcription for likely silent audio.")
+                skip_transcription = True
+        if skip_transcription:
+            text = ""
+            result = {"text": "", "chunks": []}
+        else:
+            result = self.asr_pipeline(audio_path, return_timestamps="word", generate_kwargs={"task": "transcribe", "language": self.config.language})
+            text = result["text"]
         if self.config.punctuation_correction:
             text = correct_punctuation(text)
         if self.config.capitalization:
@@ -145,7 +159,10 @@ class VideoToTextPipeline:
                 json.dump(patterns, f, indent=2)
         else:
             patterns = None
-        save_text(text, self.config.output_text_path)
+            
+        # Format transcript with paragraphs and speakers
+        formatted_text = format_transcript_with_paragraphs_and_speakers(result)
+        save_text(formatted_text, self.config.output_text_path)
         if self.config.generate_subtitles:
             save_subtitles(result, self.config.output_subs_path)
         print(f"Transcription saved to {self.config.output_text_path}")

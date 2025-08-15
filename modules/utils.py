@@ -75,6 +75,45 @@ def identify_speech_patterns(audio: np.ndarray, sr: int):
         'num_segments': len(intervals)
     }
 
+def format_transcript_with_paragraphs_and_speakers(result, min_pause_s=1.0):
+    """
+    Format transcript with paragraph breaks (based on long pauses) and basic speaker separation (placeholder).
+    - result: ASR pipeline output with 'chunks' (word-level timestamps)
+    - min_pause_s: minimum pause (in seconds) to start a new paragraph
+    Returns: formatted string
+    """
+    chunks = result.get('chunks', [])
+    if not chunks:
+        return result.get('text', '')
+    paragraphs = []
+    current_para = []
+    last_end = None
+    speaker_id = 1
+    # Placeholder: alternate speakers every N words (simulate diarization)
+    words_per_speaker = 30
+    word_count = 0
+    for i, chunk in enumerate(chunks):
+        word = chunk['text']
+        start, end = chunk['timestamp']
+        if last_end is not None:
+            pause = start - last_end
+            if pause > min_pause_s:
+                # New paragraph, possibly new speaker
+                para_text = ' '.join(current_para).strip()
+                if para_text:
+                    paragraphs.append(f"Speaker {speaker_id}:\n{para_text}")
+                current_para = []
+                # Simulate speaker change every paragraph
+                speaker_id = speaker_id + 1 if (word_count // words_per_speaker) % 2 == 1 else speaker_id
+        current_para.append(word)
+        last_end = end
+        word_count += 1
+    # Add last paragraph
+    para_text = ' '.join(current_para).strip()
+    if para_text:
+        paragraphs.append(f"Speaker {speaker_id}:\n{para_text}")
+    return '\n\n'.join(paragraphs)
+
 def compute_wer(reference: str, hypothesis: str) -> float:
     """
     Compute Word Error Rate (WER) between reference and hypothesis strings.
