@@ -44,12 +44,34 @@ python -m venv ai-video-to-text_env
 ai-video-to-text_env\Scripts\activate.bat
 ```
 
+
 3. **Install dependencies:**
 
 All required packages are listed in `requirements.txt`. Install them with:
 
 ```sh
 pip install -r requirements.txt
+```
+
+**IMPORTANT for GPU/CUDA users:**
+
+The default `torch` in `requirements.txt` may be CPU-only. To use your NVIDIA GPU, uninstall torch and install the correct CUDA-enabled version for your CUDA toolkit:
+
+For CUDA 12.1:
+```sh
+pip uninstall torch -y
+pip install torch==2.2.1+cu121 torchvision==0.17.1+cu121 torchaudio==2.2.1+cu121 --index-url https://download.pytorch.org/whl/cu121
+```
+For CUDA 11.8:
+```sh
+pip uninstall torch -y
+pip install torch==2.2.1+cu118 torchvision==0.17.1+cu118 torchaudio==2.2.1+cu118 --index-url https://download.pytorch.org/whl/cu118
+```
+Check your CUDA version with `nvcc --version` or your NVIDIA control panel.
+
+Verify GPU support:
+```sh
+python -c "import torch; print('CUDA available:', torch.cuda.is_available()); print('CUDA device count:', torch.cuda.device_count()); print('CUDA version:', torch.version.cuda); print('Torch version:', torch.__version__)"
 ```
 
 **requirements.txt preview:**
@@ -184,7 +206,7 @@ You will see live results in the console and files will be saved for each audio 
 
 - `--realtime` : Enable real-time audio processing from microphone
 - `--batch` : Transcribe all audio/video files in the `input` directory. Each file will be processed and outputs saved to `output/` with unique filenames.
-- `--cuda-device N` : Select which CUDA GPU to use (e.g., `--cuda-device 1` for GPU 1, default is 0)
+- `--cuda-device N` : Select which CUDA GPU to use (e.g., `--cuda-device 1` for GPU 1, default is 0). If you only have one GPU, use `--cuda-device 0`. If an invalid GPU index is given, the program will raise an error and print the number of available GPUs.
 - `--wer reference.txt hypothesis.txt` : Compute Word Error Rate (WER) between a ground-truth transcript and a system output
 ### Batch Mode
 

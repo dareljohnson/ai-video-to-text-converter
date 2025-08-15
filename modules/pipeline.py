@@ -80,13 +80,19 @@ class VideoToTextPipeline:
 
     def __init__(self, config: AppConfig):
         self.config = config
-        self.device = "cuda" if torch.cuda.is_available() and config.device == "cuda" else "cpu"
-        cuda_idx = config.cuda_device if self.device == "cuda" else -1
-        if self.device == "cuda":
+        # Improved device selection: use GPU if cuda_device >= 0 and CUDA is available
+        if torch.cuda.is_available() and getattr(config, 'cuda_device', -1) >= 0:
+            self.device = "cuda"
+            cuda_idx = config.cuda_device
             n_gpus = torch.cuda.device_count()
             if cuda_idx >= n_gpus:
                 raise ValueError(f"Requested CUDA device {cuda_idx}, but only {n_gpus} GPUs are available.")
-            print(f"[INFO] Using CUDA device {cuda_idx}: {torch.cuda.get_device_name(cuda_idx)}")
+            device_name = torch.cuda.get_device_name(cuda_idx)
+            print(f"[INFO] Inference device: CUDA:{cuda_idx} ({device_name})")
+        else:
+            self.device = "cpu"
+            cuda_idx = -1
+            print("[INFO] Inference device: CPU")
 
         # Pipeline for ASR    
         self.asr_pipeline = pipeline(
