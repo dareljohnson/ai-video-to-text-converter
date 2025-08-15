@@ -91,8 +91,7 @@ class VideoToTextPipeline:
         self.asr_pipeline = pipeline(
             "automatic-speech-recognition",
             model=config.model_name,
-            #device=cuda_idx,
-            device_map="auto",
+            device=cuda_idx,
             model_kwargs={
                 "torch_dtype": torch.float16 if self.device == "cuda" else torch.float32,
                 "attn_implementation": "eager"
