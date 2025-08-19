@@ -200,7 +200,6 @@ Current test coverage includes:
     source ai-video-to-text_env/bin/activate
     ```
 
-
 3. **Install dependencies:**
 
 All required packages are listed in `requirements.txt`. Install them with:
@@ -317,9 +316,9 @@ yarl==1.20.1
    ```sh
    ffmpeg -version
    ```
-```
 
 ---
+
 
 ## Usage
 
@@ -353,7 +352,7 @@ yarl==1.20.1
    - Subtitles are saved in `output/output.srt`
    - Logs are saved in `logs/pipeline.log`
 
-4. **Check outputs:**
+5. **Check outputs:**
    - Transcript: `output/output.txt`
    - Subtitles: `output/output.srt`
    - Timing details: `output/timings.txt`
@@ -367,6 +366,7 @@ python app.py --batch
 ```
 
 Features:
+
 - Processes all supported files in `input/` directory
 - Generates unique output files for each input
 - Saves timing information for each file
@@ -381,6 +381,7 @@ python app.py --realtime
 ```
 
 Features:
+
 - Live transcription display in console
 - Continuous saving to `output/realtime/realtime_transcript.txt`
 - Optional MFCC extraction to `output/results/mfcc_chunk_*.npy`
@@ -447,6 +448,7 @@ python app.py --wer reference.txt output/output.txt
 ```
 
 The WER score ranges from 0 (perfect) to 1 (completely different), helping you:
+
 - Evaluate transcription quality
 - Compare different model configurations
 - Validate improvements in your pipeline
@@ -568,7 +570,7 @@ You can also import and use utility functions from `modules.utils` for MFCC extr
 - Change model, language, HuggingFace token, thread limits, diarization method, or output paths by editing `modules/config.py` or passing parameters to `AppConfig`.
 - Extend the pipeline or utility functions for advanced use cases.
 
-----
+---
 
 
 ## Configuration
@@ -676,6 +678,6 @@ If you have GPU-related problems:
 This project is licensed under the Apache License, Version 2.0.
 You may obtain a copy of the License at [http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0)
 
-Unless required by applicable law or agreed to in writing, software distributed under the License 
-is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express 
+Unless required by applicable law or agreed to in writing, software distributed under the License
+is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
 or implied. See the LICENSE file for the full license text.
