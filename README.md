@@ -11,11 +11,12 @@ This project provides a robust, production-ready pipeline for converting audio o
 
 **Latest Updates:**
 
-- Added comprehensive test suite with pytest
-- Improved text processing with better speaker diarization
-- Enhanced memory management and error handling
-- Added detailed test documentation
-- Improved cross-platform compatibility
+- Added automatic directory creation and management
+- Improved error handling for file operations
+- Enhanced cross-platform path compatibility
+- Added comprehensive test coverage (35 tests)
+- Fixed repository size and management issues
+- Improved model cache handling
 
 ---
 
@@ -54,6 +55,52 @@ This project provides a robust, production-ready pipeline for converting audio o
 - Extensive unit test coverage with pytest
 - Modular, extensible architecture
 - CI/CD ready test suite
+
+### Directory Structure
+
+The program automatically manages the following directory structure:
+
+```
+ai-video-to-text-converter/
+├── input/               # Place input audio/video files here
+├── output/             # Generated transcripts and subtitles
+│   ├── *.txt          # Text transcripts
+│   └── *.srt          # Subtitle files
+├── logs/              # Log files and processing records
+├── model_cache/       # Downloaded models (gitignored)
+└── tests/             # Test files and fixtures
+```
+
+Key features:
+- Automatic directory creation
+- Configurable output paths
+- Cross-platform path handling
+- Gitignored cache directories
+- Organized output structure
+
+---
+
+## Directory Management
+
+The program automatically handles all necessary directories:
+
+1. **Standard Directories:**
+   - `input/`: For input media files
+   - `output/`: For transcripts and subtitles
+   - `logs/`: For log files and reports
+   - `model_cache/`: For downloaded models (auto-created as needed)
+
+2. **Directory Creation:**
+   - Creates missing directories automatically
+   - Handles both file and directory paths
+   - Creates parent directories as needed
+   - Maintains proper permissions
+
+3. **Path Handling:**
+   - Cross-platform path compatibility
+   - Relative path resolution
+   - Absolute path conversion
+   - Special character handling
 
 ---
 
@@ -276,11 +323,13 @@ yarl==1.20.1
 
 ## Usage
 
-### Single File Mode
+### Quick Start
 
-To process a single audio or video file:
+1. **Place your media file in the `input` directory**
+   - The directory will be created automatically if it doesn't exist
+   - Supported formats: MP4, AVI, MOV, MKV, WAV, MP3, FLAC, OGG
 
-1. **Activate the environment:**
+2. **Activate the environment:**
 
     ```sh
     # Windows PowerShell
@@ -293,13 +342,16 @@ To process a single audio or video file:
     source ai-video-to-text_env/bin/activate
     ```
 
-2. **Run the application:**
+3. **Run the application:**
 
     ```sh
     python app.py
     ```
 
-3. **Enter the path** to your input file when prompted (e.g., `input/video.mp4`)
+4. **Check the output directory**
+   - Transcripts are saved in `output/output.txt`
+   - Subtitles are saved in `output/output.srt`
+   - Logs are saved in `logs/pipeline.log`
 
 4. **Check outputs:**
    - Transcript: `output/output.txt`
