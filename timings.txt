@@ -88,3 +88,10 @@ test_output.txt: 20.46 seconds
 test_output.txt: 20.67 seconds
 test_output.txt: 0.57 seconds
 test_output.txt: 0.97 seconds
+test_output.txt: 20.62 seconds
+test_output.txt: 20.93 seconds
+test_output.txt: 20.80 seconds
+test_output.txt: 20.66 seconds
+test_output.txt: 20.48 seconds
+test_output.txt: 0.58 seconds
+test_output.txt: 0.89 seconds

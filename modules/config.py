@@ -59,19 +59,37 @@ class AppConfig(BaseModel):
 
         # Only validate paths if we're not in test mode
         skip_validation = data.get('_skip_validation', False)
-        if not skip_validation and self.input_path and not os.path.exists(self.input_path):
-            raise ValueError(f"Input path does not exist: {self.input_path}")
-
-        # Create output directories if they don't exist and we're not in test mode
+        
         if not skip_validation:
+            # Create standard directories if they don't exist
+            default_dirs = ['input', 'output', 'logs']
+            for dir_name in default_dirs:
+                os.makedirs(dir_name, exist_ok=True)
+            
+            # Check or create input path
+            if self.input_path:
+                if os.path.isfile(self.input_path):
+                    # For files, ensure parent directory exists
+                    input_dir = os.path.dirname(self.input_path)
+                    if input_dir:
+                        os.makedirs(input_dir, exist_ok=True)
+                else:
+                    # For directories, create them
+                    os.makedirs(self.input_path, exist_ok=True)
+            
+            # Create output directories if they don't exist
             text_dir = os.path.dirname(self.output_text_path)
             subs_dir = os.path.dirname(self.output_subs_path)
             
-            # Only create directories if they aren't empty (i.e. paths contain directories)
             if text_dir:
                 os.makedirs(text_dir, exist_ok=True)
             if subs_dir:
                 os.makedirs(subs_dir, exist_ok=True)
+            
+            # Ensure log directory exists
+            log_dir = os.path.dirname(self.log_file)
+            if log_dir:
+                os.makedirs(log_dir, exist_ok=True)
 
     @validator('input_path', 'output_text_path', 'output_subs_path')
     def validate_path(cls, v):
