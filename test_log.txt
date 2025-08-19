@@ -1,0 +1,52 @@
+[2025-08-18 09:52:00] INFO [modules.config.setup_logging:56]: Logging initialized at level INFO
+[2025-08-18 09:52:00] INFO [modules.config.__init__:90]: Initializing Video-to-Text Pipeline
+[2025-08-18 09:52:00] INFO [modules.config.__init__:105]: Configuring computation device
+[2025-08-18 09:52:00] INFO [modules.config.__init__:114]: Using CUDA device 0: NVIDIA GeForce RTX 4080 Laptop GPU
+[2025-08-18 10:49:22] INFO [modules.config.setup_logging:56]: Logging initialized at level INFO
+[2025-08-18 10:49:22] INFO [modules.config.__init__:90]: Initializing Video-to-Text Pipeline
+[2025-08-18 10:49:22] INFO [modules.config.__init__:105]: Configuring computation device
+[2025-08-18 10:49:22] INFO [modules.config.__init__:114]: Using CUDA device 0: NVIDIA GeForce RTX 4080 Laptop GPU
+[2025-08-18 15:38:09] INFO [modules.config.setup_logging:56]: Logging initialized at level INFO
+[2025-08-18 15:38:09] INFO [modules.config.__init__:132]: Initializing Video-to-Text Pipeline
+[2025-08-18 15:38:09] INFO [modules.config.__init__:147]: Configuring computation device
+[2025-08-18 15:38:09] INFO [modules.config.__init__:157]: Using CUDA device 0: NVIDIA GeForce RTX 4080 Laptop GPU
+[2025-08-18 15:52:11] INFO [modules.config.setup_logging:56]: Logging initialized at level INFO
+[2025-08-18 15:52:11] INFO [modules.config.__init__:132]: Initializing Video-to-Text Pipeline
+[2025-08-18 15:52:11] INFO [modules.config.__init__:147]: Configuring computation device
+[2025-08-18 15:52:11] INFO [modules.config.__init__:157]: Using CUDA device 0: NVIDIA GeForce RTX 4080 Laptop GPU
+[2025-08-18 16:28:26] INFO [modules.config.setup_logging:56]: Logging initialized at level INFO
+[2025-08-18 16:28:26] INFO [modules.config.__init__:132]: Initializing Video-to-Text Pipeline
+[2025-08-18 16:28:26] INFO [modules.config.__init__:147]: Configuring computation device
+[2025-08-18 16:28:26] INFO [modules.config.__init__:157]: Using CUDA device 0: NVIDIA GeForce RTX 4080 Laptop GPU
+[2025-08-18 16:31:20] INFO [modules.config.setup_logging:56]: Logging initialized at level INFO
+[2025-08-18 16:31:20] INFO [modules.config.__init__:132]: Initializing Video-to-Text Pipeline
+[2025-08-18 16:31:20] INFO [modules.config.__init__:147]: Configuring computation device
+[2025-08-18 16:31:20] INFO [modules.config.__init__:157]: Using CUDA device 0: NVIDIA GeForce RTX 4080 Laptop GPU
+[2025-08-18 17:00:25] INFO [modules.config.setup_logging:56]: Logging initialized at level INFO
+[2025-08-18 17:00:25] INFO [modules.config.__init__:135]: Initializing Video-to-Text Pipeline
+[2025-08-18 17:00:25] INFO [modules.config.__init__:150]: Configuring computation device
+[2025-08-18 17:00:25] INFO [modules.config.__init__:160]: Using CUDA device 0: NVIDIA GeForce RTX 4080 Laptop GPU
+[2025-08-18 17:06:40] INFO [modules.config.setup_logging:56]: Logging initialized at level INFO
+[2025-08-18 17:06:40] INFO [modules.config.__init__:146]: Initializing Video-to-Text Pipeline
+[2025-08-18 17:06:40] INFO [modules.config.__init__:161]: Configuring computation device
+[2025-08-18 17:06:40] INFO [modules.config.__init__:171]: Using CUDA device 0: NVIDIA GeForce RTX 4080 Laptop GPU
+[2025-08-18 17:11:19] INFO [modules.config.setup_logging:56]: Logging initialized at level INFO
+[2025-08-18 17:11:19] INFO [modules.config.__init__:146]: Initializing Video-to-Text Pipeline
+[2025-08-18 17:11:19] INFO [modules.config.__init__:161]: Configuring computation device
+[2025-08-18 17:11:19] INFO [modules.config.__init__:171]: Using CUDA device 0: NVIDIA GeForce RTX 4080 Laptop GPU
+[2025-08-18 17:20:57] INFO [modules.config.setup_logging:56]: Logging initialized at level INFO
+[2025-08-18 17:20:57] INFO [modules.config.__init__:155]: Initializing Video-to-Text Pipeline
+[2025-08-18 17:20:57] INFO [modules.config.__init__:170]: Configuring computation device
+[2025-08-18 17:20:57] INFO [modules.config.__init__:180]: Using CUDA device 0: NVIDIA GeForce RTX 4080 Laptop GPU
+[2025-08-18 17:25:52] INFO [modules.config.setup_logging:56]: Logging initialized at level INFO
+[2025-08-18 17:25:52] INFO [modules.config.__init__:155]: Initializing Video-to-Text Pipeline
+[2025-08-18 17:25:52] INFO [modules.config.__init__:170]: Configuring computation device
+[2025-08-18 17:25:52] INFO [modules.config.__init__:180]: Using CUDA device 0: NVIDIA GeForce RTX 4080 Laptop GPU
+[2025-08-18 20:54:52] INFO [modules.config.setup_logging:56]: Logging initialized at level INFO
+[2025-08-18 20:54:52] INFO [modules.config.__init__:174]: Initializing Video-to-Text Pipeline
+[2025-08-18 20:54:52] INFO [modules.config.__init__:189]: Configuring computation device
+[2025-08-18 20:54:52] INFO [modules.config.__init__:199]: Using CUDA device 0: NVIDIA GeForce RTX 4080 Laptop GPU
+[2025-08-18 21:06:38] INFO [modules.config.setup_logging:56]: Logging initialized at level INFO
+[2025-08-18 21:06:38] INFO [modules.config.__init__:174]: Initializing Video-to-Text Pipeline
+[2025-08-18 21:06:38] INFO [modules.config.__init__:189]: Configuring computation device
+[2025-08-18 21:06:38] INFO [modules.config.__init__:199]: Using CUDA device 0: NVIDIA GeForce RTX 4080 Laptop GPU
